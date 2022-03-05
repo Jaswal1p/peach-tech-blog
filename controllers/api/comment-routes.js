@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { User, Article, Comment } = require('../../models');
+const { Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 router.get('/', async (req, res) => {
     try {
@@ -13,9 +14,14 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', withAuth, async (req, res) => {
     try {
-        const dbCommentData = await Comment.create(req.body);
+        const dbCommentData = await Comment.create({
+            comment_text: req.body.comment_text,
+            post_id: req.body.post_id,
+            //have to use id from the session
+            user_id: req.session.user_id,
+        });
 
         res.status(200).json(dbCommentData);
 
@@ -26,7 +32,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
     try {
         const dbCommentData = await Comment.destroy(
             {
