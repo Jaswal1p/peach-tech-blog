@@ -1,5 +1,3 @@
-const { Sequelize } = require('sequelize/types');
-
 require('dotenv').config();
 const Sequelize = require(sequelize);
 
