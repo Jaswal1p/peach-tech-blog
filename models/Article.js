@@ -15,11 +15,11 @@ Article.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        content: {
-            type: DataTypes.STRING,
+        article_content: {
+            type: DataTypes.TEXT,
             allowNull: false,
         },
-        author_id: {
+        user_id: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'user',
