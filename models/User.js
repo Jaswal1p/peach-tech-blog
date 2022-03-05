@@ -8,7 +8,6 @@ class User extends Model {
     }
 }
 
-// user init as learned in module 13
 User.init(
     {
       // define an id column
@@ -45,8 +44,8 @@ User.init(
         validate: {
           // this means the password must be at least four characters long
           len: [4]
-        }
-      }
+        },
+      },
     },
 
     {
@@ -69,4 +68,4 @@ User.init(
     }
   );
 
-module.exports = User  
+module.exports = User;  
