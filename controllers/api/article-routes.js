@@ -1,18 +1,41 @@
 const router = require('express').Router();
 const { User, Article, Comment } = require('../../models');
+const sequelize = require('../../config/connection');
+const withAuth = require('../../utils/auth');
 
 // error handling by async, await and try
 
+// get all articles
 router.get('/', async (req, res) => {
     try {
-        const articleData = await Article.findAll(
+        const dbArticleData = await Article.findAll(
             {
-            include: [{model: User, 
-            attributes: ['username']}]
-            }
-        );
+                attributes: [
+                    'id',
+                    'title',
+                    'created_at',
+                    'article_content'
+                ],
+                order: [['created_at', 'DESC']],
+                
+                include: [
+                    {
+                     model: Comment,
+                     attributes: ['id', 'comment_text', 'post_id', 'user_id', created_at],
+                     include: {
+                         model: User,
+                         attributes: ['username']
+                     }    
+                    },
+                    
+                    {model: User, 
+                    attributes: ['username']
+                    },
+                ]
+            })
+        
 
-        res.status(200).json(articleData);
+        res.status(200).json(dbArticleData);
 
     } catch (err) {
       res.status(500).json(err);
@@ -20,30 +43,79 @@ router.get('/', async (req, res) => {
     
 });
 
-router.post('/', async (req, res) => {
+// get one article by id
+router.get('/:id', async (req, res) => {
     try {
-        const articleData = await Article.create(
+        const dbArticleData = await Article.findOne(
+            {
+               where: {
+                   id: req.params.id
+               }
+            },
+            {
+                attributes: [
+                    'id',
+                    'title',
+                    'created_at',
+                    'article_content'
+                ],
+                                
+                include: [
+                    { 
+                        model: User, 
+                        attributes: ['username']
+                    },
+                    {
+                        model: Comment,
+                        attributes: ['id', 'comment_text', 'post_id', 'user_id', created_at],
+                        include: {
+                            model: User,
+                            attributes: ['username']
+                        }    
+                    },
+                ]
+            })
+
+            if (!dbArticleData) {
+                res.status(404).json({ message: 'No article found with this id' });
+                return;
+            }    
+        
+
+        res.status(200).json(dbArticleData);
+
+    } catch (err) {
+      res.status(500).json(err);
+    }
+    
+});
+
+// post an article
+router.post('/', withAuth, async (req, res) => {
+    try {
+        const dbArticleData = await Article.create(
             {
             title: req.body.title,
-            content: req.body.content,
+            article_content: req.body.article_content,
             user_id: req.session.user_id,
             }
         );
 
-        res.status(200).json(articleData);
+        res.status(200).json(dbArticleData);
 
     } catch (err) {
-        res.status(400).json(err);
+        res.status(500).json(err);
     }    
     
 });
 
-router.put('/:id', async (req, res) => {
+// update an article
+router.put('/:id', withAuth, async (req, res) => {
     try {
-        const articleData = await Article.update(
+        const dbArticleData = await Article.update(
             {
             title: req.body.title,
-            content: req.body.content,
+            article_content: req.body.article_content,
             },
             {
              where: {
@@ -52,28 +124,34 @@ router.put('/:id', async (req, res) => {
             }
         );
 
-        res.status(200).json(articleData);
+        if (!dbArticleData) {
+            res.status(404).json({ message: 'No article found with this id' });
+            return;
+        }
+
+        res.status(200).json(dbArticleData);
 
     } catch (err) {
-      res.status(400).json(err);  
+      res.status(500).json(err);  
     }
     
 });
 
-router.delete('/:id', async (req, res) => {
+// Delete an article
+router.delete('/:id', withAuth, async (req, res) => {
     try {
-        const articleData = await Article.destroy(
+        const dbArticleData = await Article.destroy(
             {
              where: { id: req.params.id,}
             }
         )
 
-        if (!articleData) {
+        if (!dbArticleData) {
             res.status(404).json({ message: 'No article found with this id!'});
             return;
         }
 
-        res.status(200).json(articleData);
+        res.status(200).json(dbArticleData);
 
     } catch (err) {
         res.status(500).json(err);
