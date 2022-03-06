@@ -25,15 +25,6 @@ User.init(
           type: DataTypes.STRING,
           allowNull: false
         },
-        // define an email column
-        email: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          unique: true,
-          validate: {
-            isEmail: true
-          }
-        },
         // define a password column
         password: {
           type: DataTypes.STRING,
