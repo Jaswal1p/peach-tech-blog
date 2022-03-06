@@ -13,15 +13,15 @@ router.get('/', async (req, res) => {
                 attributes: [
                     'id',
                     'title',
-                    'created_at',
-                    'article_content'
+                    'article_content',
+                    'created_at'
                 ],
                 order: [['created_at', 'DESC']],
                 
                 include: [
                     {
                      model: Comment,
-                     attributes: ['id', 'comment_text', 'article_id', 'user_id', created_at],
+                     attributes: ['id', 'comment_text','user_id', 'article_id',  created_at],
                      include: {
                          model: User,
                          attributes: ['username']
@@ -56,8 +56,8 @@ router.get('/:id', async (req, res) => {
                 attributes: [
                     'id',
                     'title',
-                    'created_at',
-                    'article_content'
+                    'article_content',
+                    'created_at'
                 ],
                                 
                 include: [
@@ -67,7 +67,7 @@ router.get('/:id', async (req, res) => {
                     },
                     {
                         model: Comment,
-                        attributes: ['id', 'comment_text', 'article_id', 'user_id', created_at],
+                        attributes: ['id', 'comment_text','user_id', 'article_id', created_at],
                         include: {
                             model: User,
                             attributes: ['username']
