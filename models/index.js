@@ -16,7 +16,7 @@ Article.belongsTo(User, {
 });
 
 Article.hasMany(Comment, {
-    foreignKey: 'post_id',
+    foreignKey: 'article_id',
 });
 
 Comment.belongsTo(User, {
@@ -24,7 +24,7 @@ Comment.belongsTo(User, {
 });
 
 Comment.belongsTo(Article, {
-    foreignKey: 'post_id',
+    foreignKey: 'article_id',
 })
 
 

@@ -18,7 +18,7 @@ router.post('/', withAuth, async (req, res) => {
     try {
         const dbCommentData = await Comment.create({
             comment_text: req.body.comment_text,
-            post_id: req.body.post_id,
+            article_id: req.body.article_id,
             //have to use id from the session
             user_id: req.session.user_id,
         });
