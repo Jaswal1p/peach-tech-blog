@@ -1,36 +1,30 @@
-// const req = require('express/lib/request');
 const User = require('./User');
-const Article = require('./Article');
+const Post = require('./Post');
 const Comment = require('./Comment');
 
-User.hasMany(Article, {
-    foreignKey: 'user_id',
+//create associations
+User.hasMany(Post, {
+    foreignKey: 'user_id'
 });
 
-User.hasMany(Comment, {
+Post.belongsTo(User, {
     foreignKey: 'user_id',
-});
-
-Article.belongsTo(User, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE'
-});
-
-Article.hasMany(Comment, {
-    foreignKey: 'article_id',
-    onDelete: 'CASCADE'
 });
 
 Comment.belongsTo(User, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE'
+    foreignKey: 'user_id'
+  });
+  
+Comment.belongsTo(Post, {
+    foreignKey: 'post_id'
+});
+  
+User.hasMany(Comment, {
+    foreignKey: 'user_id'
+});
+  
+Post.hasMany(Comment, {
+    foreignKey: 'post_id'
 });
 
-Comment.belongsTo(Article, {
-    foreignKey: 'article_id',
-    onDelete: 'CASCADE'
-})
-
-
-
-module.exports = { User, Article, Comment };
+module.exports = {User, Post, Comment};
