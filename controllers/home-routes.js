@@ -1,21 +1,21 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { Article, User, Comment } = require('../models');
+const { Post, User, Comment } = require('../models');
 
 router.get('/', (req, res) => {
     console.log(req.session);
     
-    Article.findAll({
+    Post.findAll({
       attributes: [
         'id',
         'title',
         'created_at',
-        'article_content'
+        'post_content'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'article_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -27,10 +27,10 @@ router.get('/', (req, res) => {
         }
       ]
     })
-      .then(dbarticleData => {
-        const articles = dbarticleData.map(article => article.get({ plain: true }));
+      .then(dbPostData => {
+        const posts = dbPostData.map(post => post.get({ plain: true }));
         res.render('homepage', {
-            articles,
+            posts,
             loggedIn: req.session.loggedIn
           });
       })
@@ -49,9 +49,7 @@ router.get('/login', (req, res) => {
     res.render('login');
   });
 
-
-
-router.get('/signup', (req, res) => {
+  router.get('/signup', (req, res) => {
     if (req.session.loggedIn) {
       res.redirect('/');
       return;
@@ -60,10 +58,8 @@ router.get('/signup', (req, res) => {
     res.render('signup');
   });
 
-
-  
-router.get('/article/:id', (req, res) => {
-    Article.findOne({
+  router.get('/post/:id', (req, res) => {
+    Post.findOne({
       where: {
         id: req.params.id
       },
@@ -71,12 +67,12 @@ router.get('/article/:id', (req, res) => {
         'id',
         'title',
         'created_at',
-        'article_content'
+        'post_content'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'article_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -88,18 +84,18 @@ router.get('/article/:id', (req, res) => {
         }
       ]
     })
-      .then(dbarticleData => {
-        if (!dbarticleData) {
-          res.status(404).json({ message: 'No article found with this id' });
+      .then(dbPostData => {
+        if (!dbPostData) {
+          res.status(404).json({ message: 'No post found with this id' });
           return;
         }
   
         // serialize the data
-        const article = dbarticleData.get({ plain: true });
+        const post = dbPostData.get({ plain: true });
   
         // pass data to template
-        res.render('single-article', {
-            article,
+        res.render('single-post', {
+            post,
             loggedIn: req.session.loggedIn
           });
       })

@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { Article, User, Comment } = require('../models');
+const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', withAuth, (req, res) => {
-    Article.findAll({
+    Post.findAll({
       where: {
         // use the ID from the session
         user_id: req.session.user_id
@@ -13,12 +13,12 @@ router.get('/', withAuth, (req, res) => {
         'id',
         'title',
         'created_at',
-        'article_content'
+        'post_content'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'article_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -30,10 +30,10 @@ router.get('/', withAuth, (req, res) => {
         }
       ]
     })
-      .then(dbarticleData => {
+      .then(dbPostData => {
         // serialize data before passing to template
-        const articles = dbarticleData.map(article => article.get({ plain: true }));
-        res.render('dashboard', { articles, loggedIn: true });
+        const posts = dbPostData.map(post => post.get({ plain: true }));
+        res.render('dashboard', { posts, loggedIn: true });
       })
       .catch(err => {
         console.log(err);
@@ -42,7 +42,7 @@ router.get('/', withAuth, (req, res) => {
   });
 
   router.get('/edit/:id', withAuth, (req, res) => {
-    Article.findOne({
+    Post.findOne({
       where: {
         id: req.params.id
       },
@@ -50,12 +50,12 @@ router.get('/', withAuth, (req, res) => {
         'id',
         'title',
         'created_at',
-        'article_content'
+        'post_content'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'article_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -67,17 +67,17 @@ router.get('/', withAuth, (req, res) => {
         }
       ]
     })
-      .then(dbarticleData => {
-        if (!dbarticleData) {
-          res.status(404).json({ message: 'No article found with this id' });
+      .then(dbPostData => {
+        if (!dbPostData) {
+          res.status(404).json({ message: 'No post found with this id' });
           return;
         }
   
         // serialize the data
-        const article = dbarticleData.get({ plain: true });
+        const post = dbPostData.get({ plain: true });
 
-        res.render('edit-article', {
-            article,
+        res.render('edit-post', {
+            post,
             loggedIn: true
             });
       })
@@ -85,10 +85,10 @@ router.get('/', withAuth, (req, res) => {
         console.log(err);
         res.status(500).json(err);
       });
-}); 
+});
 
 router.get('/create/', withAuth, (req, res) => {
-    Article.findAll({
+    Post.findAll({
       where: {
         // use the ID from the session
         user_id: req.session.user_id
@@ -97,12 +97,12 @@ router.get('/create/', withAuth, (req, res) => {
         'id',
         'title',
         'created_at',
-        'article_content'
+        'post_content'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'article_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -114,15 +114,16 @@ router.get('/create/', withAuth, (req, res) => {
         }
       ]
     })
-      .then(dbarticleData => {
+      .then(dbPostData => {
         // serialize data before passing to template
-        const articles = dbarticleData.map(article => article.get({ plain: true }));
-        res.render('create-article', { articles, loggedIn: true });
+        const posts = dbPostData.map(post => post.get({ plain: true }));
+        res.render('create-post', { posts, loggedIn: true });
       })
       .catch(err => {
         console.log(err);
         res.status(500).json(err);
       });
   });
+
 
 module.exports = router;
