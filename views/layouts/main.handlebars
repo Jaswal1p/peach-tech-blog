@@ -17,10 +17,11 @@
                 {{#if loggedIn}}
                 <a href="/" class="navbar-item is-hoverable pt-1">homepage</a>
                 <a href="/dashboard" class="navbar-item is-hoverable pt-1">dashboard</a>
-                <a href="/dashboard" class="navbar-item is-hoverable pt-1 mr-4">create article</a>
+                <a href="/dashboard" class="navbar-item is-hoverable pt-1 mr-4">create post</a>
                 <button id="logout" class="button is-danger">logout</button>
                 {{else}}
                 <a href="/" class="navbar-item is-hoverable pt-1">homepage</a>
+                <a href="/dashboard" class="navbar-item is-hoverable pt-1">dashboard</a>
                 <a href="/login" class="button is-primary">login</a>
                 {{/if}}
             </nav>
@@ -33,9 +34,9 @@
         <footer class="footer rows pb-2">
             <div class="row-is-full content has-text-centered">
                 <p>
-                <a href="/">homepage</a>{{#if loggedIn}} | 
-                <a href="/dashboard/">dashboard</a> | 
-                <a href="/dashboard/create/">create new article</a>
+                <a href="/">Homepage</a>{{#if loggedIn}} | 
+                <a href="/dashboard/">Dashboard</a> | 
+                <a href="/dashboard/create/">Create post</a>
                 {{else}}
                 | <a href="/login/">login</a>
                 {{/if}}

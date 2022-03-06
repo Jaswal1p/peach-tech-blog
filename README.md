@@ -6,6 +6,9 @@
  # GitHub Repository Link
  https://github.com/Jaswal1p/peach-tech-blog.git
 
+ # Heroku Deployed Link
+ https://peach-tech-blog.herokuapp.com/
+
  # Video link
  
 
