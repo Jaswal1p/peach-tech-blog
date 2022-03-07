@@ -7,6 +7,7 @@
  https://github.com/Jaswal1p/peach-tech-blog.git
 
  # Heroku Deployed Link
+ 
  https://peach-techno-blog.herokuapp.com/
 
  # Video link
@@ -21,7 +22,7 @@
  * [Questions](#questions)
  
  # Description
- Once again this was a great learning experience to use sequelize to work with mySQL2 to create tables and seed the tables by using sequalize and connecting it to MySQL database. I also learned how to protect password by using dotenv and keeping the env file in gitignore file! That was pretty cool. My biggest challenge was--------  
+ Once again this was a great learning experience to use sequelize to work with mySQL2 to create tables and seed the tables by using sequalize and connecting it to MySQL database. Then finally getting back to the front end with the help of handlebars and learning sessions, cookies and password safety along the way! 
 
 
  # Screenshots
