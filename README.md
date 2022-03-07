@@ -7,7 +7,7 @@
  https://github.com/Jaswal1p/peach-tech-blog.git
 
  # Heroku Deployed Link
- https://peach-techblog.herokuapp.com/
+ https://peach-techno-blog.herokuapp.com/
 
  # Video link
  https://drive.google.com/file/d/1VEdRMXcnTbcO3J47fkT1G-SB0fimilq-/view
